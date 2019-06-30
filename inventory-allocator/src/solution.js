@@ -1,3 +1,14 @@
+/**
+Instructions are Below:
+Pull the repo from the GitHub link below. Solution is in src directory with the name solution(src/solution.js).
+To run the tests:
+ npm install.
+ npm test, npm run test, or npm mocha.
+To Run console.log tests open with Repl.it link below and just uncomment line 67 to 137;
+
+Note: I could use a JavaScript Map(new Map) but I used JavaScript Object {} for syntax simplicity;
+ **/
+
 class InventoryAllocator {
   constructor(shipments = {}, inventoryDist = []) {
     this.shipments = shipments; // orders
