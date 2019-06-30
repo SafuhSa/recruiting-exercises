@@ -1,7 +1,7 @@
 class InventoryAllocator {
   constructor(shipments = {}, inventoryDist = []) {
-    this.shipments = shipments;
-    this.inventoryDist = inventoryDist;
+    this.shipments = shipments; // orders
+    this.inventoryDist = inventoryDist; //warehouses
   }
 
   handleShipment(warehouse, shipments) {
@@ -10,9 +10,10 @@ class InventoryAllocator {
     for (let item in shipments) {
       let inventoryAmount = inventory[item];
       let orderAmount = shipments[item];
-      if (inventoryAmount && orderAmount) {
-        if (!result) result = {};
-        if (inventoryAmount >= orderAmount) {
+      if (inventoryAmount && orderAmount) { // to avoid cases if either orderAmount, or inventoryAmount is zero
+        if (!result) result = {}; // initiate result; 
+        // didn't modified inventory as we are only checking for the cheapestShipment no making it. 
+        if (inventoryAmount >= orderAmount) { 
           result[item] = orderAmount;
           delete shipments[item];
         } else {
@@ -21,33 +22,34 @@ class InventoryAllocator {
         }
       }
     }
-    // console.log(result)
     return result;
   }
   cheapestShipment() {
     let { shipments, inventoryDist } = this;
-    if (!inventoryDist.length) return [];
+    if (!inventoryDist.length) return []; 
     shipments = Object.assign({}, shipments);// copy shipments so orginal shipments won't get modified;
     let result = [];
 
 
     for (let warehouse of inventoryDist) {
-      let res = this.handleShipment(warehouse, shipments)
-      if (res) result.push({ [warehouse.name]: res })
-      if (this.objectIsEmpty(shipments)) return result;
+      // call handleShipment to check if any of items inside the order exist in the warehouse;
+      // it return either the items that exist in the warehouse with modifing the order(shipments) or it return undefined;
+      let res = this.handleShipment(warehouse, shipments);
+      if (res) result.push({ [warehouse.name]: res }); // to make sure some items exist in this warehouse;
+      if (this.objectIsEmpty(shipments)) return result; // to check if order(shipments) is empty like {}
     }
-    // console.log('sa', shipments,'fsg', this.shipments)
-    if (!this.objectIsEmpty(shipments)) return [];
+
+    if (!this.objectIsEmpty(shipments)) return []; // again check if order(shipments) is empty to make sure all shipments is fullfilled 
     return result;
   }
 
-  objectIsEmpty(obj) {
+  objectIsEmpty(obj) { // to check if object like {} is empty;
     for (let key in obj) {
       return false;
     }
     return true;
   }
-
+// addShipments is for adding a single item quantity to the order
   addShipments(item, amount) {
     this.shipments[item] = amount + this.shipments[item] || amount;
     return this.shipments;
