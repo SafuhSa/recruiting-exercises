@@ -2,9 +2,9 @@
   "name": "inventory-allocator",
   "version": "1.0.0",
   "description": "Deliverr",
-  "main": "solution.js",
+  "main": "./src/solution.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha ./spec/test.js"
   },
   "author": "Safuh Alsarayji",
   "license": "ISC",
